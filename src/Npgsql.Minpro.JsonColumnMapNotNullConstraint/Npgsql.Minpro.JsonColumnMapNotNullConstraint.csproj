@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>Npgsql.MinRepro</RootNamespace>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <!--
+        PostgresException: 23502: null value in column "featuresjson" of relation "efcore_wbe_serverprofile" violates not-null constraint
+        DETAIL: Failing row contains (ea3d7b8c-273a-41b5-89cf-45f11710b6c3, 34db4476-ec77-4244-99f3-b5cd425c37e0, f, Purgatory Scummunity PVE/PVP Zones - High Loot, https://panel.whalleybot.com/img/logo_head.png, null, , null, null).
+    -->
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <!-- TODO: there is also a Marten.NodaTime library, so perhaps a good thing I did consider Marten since we use that. -->
+        <!--<PackageReference Include="Marten" Version="7.25.2" />-->
+        <!-- TODO: as it turns out, not a great fit after all... we will refert thinking to more traditional ORM, probably EFCore.
+            Which being the case, there is support for pg and for NodaTime, which may work for us after all.
+            -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="8.0.4" />
+    </ItemGroup>
+
+</Project>
