@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Data;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
 
 namespace Npgsql.Minpro;
 
