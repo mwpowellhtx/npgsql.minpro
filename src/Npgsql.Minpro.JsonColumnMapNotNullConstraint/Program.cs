@@ -35,12 +35,18 @@ internal class Program
 
         // TODO: there is nothing about the model, value converter, mappings, database table column creation script, no-thing...
         // TODO: that should be translated, interpreted, transcribed, ad nauseam, ad infinitum, as a 'null'.
+        // TODO: see npgsql/efcore.pg https://github.com/npgsql/efcore.pg/issues/3238
+        // TODO: see npgsql https://github.com/npgsql/npgsql/issues/5797
         models.Add(model);
 
         /* TODO: It seems that, for whatever reason, before or immediately after adding the
          * instance to the set, we must evaluate the properties which shall be serialized.
+         * When we do not iterate the property.get aspects, then it seems as though EFCORE
+         * and/or NPGSQL are taking liberties, reaching down through the persistence layers
+         * for default values. As opposed to the ones we very deliberately, intentionally
+         * provided from the model perspective.
          */
-        var model_Items = model.Items;
+        //var model_Items = model.Items;
 
         /* TODO: happens when, for instance, we do not specify a the mapping having a default value
          * TODO: one other thing we are suspicious toward is the disposition toward NRT-ness being a factor
