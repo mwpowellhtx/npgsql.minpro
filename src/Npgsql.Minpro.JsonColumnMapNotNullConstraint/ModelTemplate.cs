@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Npgsql.Minpro;
 
@@ -13,14 +14,27 @@ public class ModelTemplate
         set => _id = value;
     }
 
+    private DateTime? _addedAt;
+
+    public virtual DateTime? AddedAt
+    {
+        get => _addedAt;
+        set => _addedAt = value;
+    }
+
     // Does not matter what we populate with, could be empty, but the mapping must succeed.
     private ICollection<string> _items;
 
     public virtual ICollection<string> Items
     {
         // Key ensuring value:
-        get => _items ??= [];
-        //            ^^^^^^
+        get
+        {
+            Trace.WriteLineIf(_items is null, $"{nameof(_items)} value is null");
+            Trace.WriteLineIf(_items is not null, $"{nameof(_items)} value is not null: Count = {_items?.Count ?? -1}");
+            return _items ??= [$"{DateTime.UtcNow:O}"];
+            //            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        }
         set => _items = value ?? [];
         //            ^^^^^^^^^^^^^
     }

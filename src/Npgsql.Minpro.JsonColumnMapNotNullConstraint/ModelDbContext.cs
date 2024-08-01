@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Npgsql.Minpro;
 
@@ -17,7 +18,17 @@ public class ModelDbContext : DbContext
         {
             o.ToTable("efcore_minpro_modeltemplate");
             o.HasKey(p => p.Id);
-            o.Property(p => p.Items).IsRequired().HasColumnName("itemsjson").HasColumnType("json").HasConversion(new ItemsValueConverter());
+            o.Property(p => p.AddedAt)
+                .IsRequired()
+                .HasDefaultValue(DateTime.UtcNow)
+                ;
+            o.Property(p => p.Items)
+                .HasColumnName("itemsjson")
+                .HasColumnType("json")
+                .IsRequired()
+                .HasDefaultValue(new[] { "test" })
+                .HasConversion(new ItemsValueConverter())
+                ;
         });
 
         modelBuilder.UseLowerCaseColumnNamingConvention();

@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS efcore_minpro_modeltemplate;
 
 CREATE TABLE IF NOT EXISTS efcore_minpro_modeltemplate (
   id UUID NOT NULL DEFAULT gen_random_uuid(),
+  addedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   itemsJson JSON NOT NULL DEFAULT '[]'::JSON,
     CONSTRAINT pk_efcore_minpro_modeltemplate PRIMARY KEY (id)
 );

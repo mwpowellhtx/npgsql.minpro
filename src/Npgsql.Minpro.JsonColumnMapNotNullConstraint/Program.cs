@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,8 @@ internal class Program
         {
             var connectionString = Environment.GetEnvironmentVariable("NPGSQL_MINPRO_CONNECTION_STRING");
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString).EnableDynamicJson();
+            // TODO: ditto conventions fluent chaining
+            dataSourceBuilder.UseJsonNet();
             var dataSource = dataSourceBuilder.Build();
             contextOptions.UseNpgsql(dataSource);
         }, ServiceLifetime.Singleton);
@@ -34,13 +37,23 @@ internal class Program
         // TODO: that should be translated, interpreted, transcribed, ad nauseam, ad infinitum, as a 'null'.
         models.Add(model);
 
-        /* PostgresException: 23502: null value in column "itemsjson" of relation "efcore_minpro_modeltemplate" violates not-null constraint
+        /* TODO: It seems that, for whatever reason, before or immediately after adding the
+         * instance to the set, we must evaluate the properties which shall be serialized.
+         */
+        var model_Items = model.Items;
+
+        /* TODO: happens when, for instance, we do not specify a the mapping having a default value
+         * TODO: one other thing we are suspicious toward is the disposition toward NRT-ness being a factor
+         * PostgresException: 23502: null value in column "itemsjson" of relation "efcore_minpro_modeltemplate" violates not-null constraint
          * DETAIL: Failing row contains(e47480db-e982-4e0e-b7f1-6d3b0bd5a82b, null).
          */
         context.SaveChanges();
 
-    Debug.Assert(model.Id != Guid.Empty);
+        var other = models.Single(x => x.Id == model.Id);
 
-        Console.WriteLine($"Model was added: {model.Id:d}");
+        Debug.Assert(model.Id != Guid.Empty);
+        Debug.Assert(model.Id == other.Id);
+
+        Trace.WriteLine($"Model was added: id = {model.Id:d}, at = {(model.AddedAt ?? DateTime.UtcNow):O}");
     }
 }
