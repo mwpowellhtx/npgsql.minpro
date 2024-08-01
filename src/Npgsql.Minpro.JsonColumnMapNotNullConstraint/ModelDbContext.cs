@@ -20,18 +20,19 @@ public class ModelDbContext : DbContext
         modelBuilder.Entity<ModelTemplate>(o =>
         {
             o.ToTable("efcore_minpro_modeltemplate");
+
             o.HasKey(p => p.Id);
+
             o.Property(p => p.AddedAt)
                 .IsRequired()
-                .HasDefaultValue(ModelTemplate.AddedAtDefault)
-                ;
+                .HasDefaultValue(ModelTemplate.AddedAtDefault);
+
             o.Property(p => p.Items)
                 .HasColumnName("itemsjson")
                 .HasColumnType("JSON")
                 .IsRequired()
                 .HasDefaultValue(ModelTemplate.ItemsDefault)
-                .HasConversion(new ItemsValueConverter())
-                ;
+                .HasConversion(new ItemsValueConverter());
         });
 
         modelBuilder.UseLowerCaseColumnNamingConvention();
