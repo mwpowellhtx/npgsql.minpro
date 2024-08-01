@@ -14,6 +14,9 @@ public class ModelDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // Definitely prefer property, preferring field is just a dumb idea.
+        modelBuilder.UsePropertyAccessMode(PropertyAccessMode.Property);
+
         modelBuilder.Entity<ModelTemplate>(o =>
         {
             o.ToTable("efcore_minpro_modeltemplate");
