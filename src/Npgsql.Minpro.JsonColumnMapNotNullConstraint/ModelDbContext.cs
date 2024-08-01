@@ -23,13 +23,13 @@ public class ModelDbContext : DbContext
             o.HasKey(p => p.Id);
             o.Property(p => p.AddedAt)
                 .IsRequired()
-                .HasDefaultValue(DateTime.UtcNow)
+                .HasDefaultValue(ModelTemplate.AddedAtDefault)
                 ;
             o.Property(p => p.Items)
                 .HasColumnName("itemsjson")
-                .HasColumnType("json")
+                .HasColumnType("JSON")
                 .IsRequired()
-                .HasDefaultValue(new[] { "test" })
+                .HasDefaultValue(ModelTemplate.ItemsDefault)
                 .HasConversion(new ItemsValueConverter())
                 ;
         });

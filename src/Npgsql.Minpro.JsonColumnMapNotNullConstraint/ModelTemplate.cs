@@ -14,6 +14,8 @@ public class ModelTemplate
         set => _id = value;
     }
 
+    public static DateTime AddedAtDefault => DateTime.UtcNow;
+
     private DateTime? _addedAt;
 
     public virtual DateTime? AddedAt
@@ -21,6 +23,8 @@ public class ModelTemplate
         get => _addedAt;
         set => _addedAt = value;
     }
+
+    public static ICollection<string> ItemsDefault => [];
 
     // Does not matter what we populate with, could be empty, but the mapping must succeed.
     private ICollection<string> _items;
@@ -35,8 +39,8 @@ public class ModelTemplate
             return _items ??= [$"{DateTime.UtcNow:O}"];
             //            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
-        set => _items = value ?? [];
-        //            ^^^^^^^^^^^^^
+        set => _items = value ?? ItemsDefault;
+        //            ^^^^^^^^^^^^^^^^^^^^^^^
     }
 
     public ModelTemplate()
